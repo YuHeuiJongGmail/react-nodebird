@@ -1,0 +1,8 @@
+.pem
+
+node-bird-aws.pem
+node_modules
+.env
+.next
+
+

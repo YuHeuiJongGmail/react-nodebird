@@ -39,7 +39,7 @@ if(process.env.NODE_ENV === 'production'){      //배포용을 위해
 
 
 app.use(cors({
-    origin: ['http://localhost:3060', 'nodebird.com', 'http://15.164.95.125'],      //* -> localhost 로 변경, credentials: true면 직접 주소 지정해야함
+    origin: ['http://localhost:3060', 'nodebird.com', 'http://15.165.159.210'],      //* -> localhost 로 변경, credentials: true면 직접 주소 지정해야함
     credentials: true,                      //쿠키사용 설정 
 }));
 

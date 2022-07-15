@@ -32,16 +32,21 @@ if(process.env.NODE_ENV === 'production'){      //배포용을 위해
     app.use(morgan('combined'));
     app.use(hpp());
     app.use(helmet());
+    app.use(cors({
+        origin: 'http://hijong.monster',      //* -> localhost 로 변경, credentials: true면 직접 주소 지정해야함
+        credentials: true,                      //쿠키사용 설정 
+    }));
 }else{
     app.use(morgan('dev'));
+    app.use(cors({
+        origin: true,
+        credentials: true,                      //쿠키사용 설정 
+    }));
 }
 
 
 
-app.use(cors({
-    origin: ['http://localhost:3060', 'hijong.monster'],      //* -> localhost 로 변경, credentials: true면 직접 주소 지정해야함
-    credentials: true,                      //쿠키사용 설정 
-}));
+
 
 app.use('/', express.static(path.join(__dirname, 'uploads')));      //back 폴더에 업로드폴더를 합쳐준다. join을 쓰는 이유가 os가 다르면 구분자가 다르기 때문
 app.use(express.json());                            //제이슨 형태를 해석하기 위해

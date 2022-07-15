@@ -28,10 +28,10 @@ const ImagesZoom = ({ images, onClose }) => {
                     >
                         {images.map((v) => (            //*****매우 중요 { 안에서 {}를 다시 넣으면 문법상오류는 안보이나 화면에 보이지 않는 오류 생김...}
                             <ImgWrapper key={v.src}>
-                                <img src={`http://localhost:3065/${v.src}`} alt={v.src} />
+                                <img src={`${backUrl}/${v.src}`} alt={v.src} />
                             </ImgWrapper>
                         ))}
-
+ 
 
 
                     </Slick>

@@ -6,6 +6,10 @@ const passport = require('passport');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const path = require('path');
+const hpp = require('hpp');
+const helmet = require('helmet');
+
+
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
@@ -23,9 +27,19 @@ db.sequelize.sync()
     .catch(console.error);
 
 passportConfig();
-app.use(morgan('dev'));
+
+if(process.env.NODE_ENV === 'production'){      //배포용을 위해
+    app.use(morgan('combined'));
+    app.use(hpp());
+    app.use(helmet());
+}else{
+    app.use(morgan('dev'));
+}
+
+
+
 app.use(cors({
-    origin: 'http://localhost:3060',        //* -> localhost 로 변경, credentials: true면 직접 주소 지정해야함
+    origin: ['http://localhost:3060', 'nodebird.com'],      //* -> localhost 로 변경, credentials: true면 직접 주소 지정해야함
     credentials: true,                      //쿠키사용 설정 
 }));
 

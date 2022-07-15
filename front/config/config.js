@@ -1,1 +1,1 @@
-export const backUrl = 'http://3.39.233.90'; 
+export const backUrl = 'http://api.hijong.monster/'; 

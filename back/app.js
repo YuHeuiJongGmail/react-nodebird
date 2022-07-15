@@ -39,7 +39,7 @@ if(process.env.NODE_ENV === 'production'){      //배포용을 위해
 
 
 app.use(cors({
-    origin: ['http://localhost:3060', 'hijong.monster', 'http://15.165.159.210'],      //* -> localhost 로 변경, credentials: true면 직접 주소 지정해야함
+    origin: ['http://localhost:3060', 'hijong.monster'],      //* -> localhost 로 변경, credentials: true면 직접 주소 지정해야함
     credentials: true,                      //쿠키사용 설정 
 }));
 
@@ -51,6 +51,11 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true,
+        secure: false,          //https 설정시 true로 변경할 예정
+        domain: process.env.NODE_ENV === 'production' && '.hijong.monster'
+    },
 }));
 app.use(passport.initialize());
 app.use(passport.session());

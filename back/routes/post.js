@@ -2,6 +2,9 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk');
+
 const { Post, Comment, Image, User, Hashtag } = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
@@ -12,18 +15,38 @@ try {
     console.log('upload 폴더가 없으므로 생성합니다.');
     fs.mkdirSync('uploads');
 }
+
+AWS.config.update({
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    region: 'ap-northeast-2',
+
+});
+
+
 const upload = multer({
-    storage: multer.diskStorage({
-        destination(req, file, done) {
-            done(null, 'uploads');
-        },
-        filename(req, file, done) {       //제로초.png
-            const ext = path.extname(file.originalname);    //확장자 추출(.png)
-            const basename = path.basename(file.originalname, ext);      //제로초
-            done(null, basename + '_' + new Date().getTime() + ext);      //제로초178198168189719.png
-        },
-        limits: { fileSize: 20 * 1024 * 1024 },      //20MB
+    storage: multerS3({
+        s3: new AWS.S3(),
+        bucket: 'react-nodebird-yhj',
+        key(req, file, cb){
+            cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`)
+        }
+        
     })
+
+
+
+    // storage: multer.diskStorage({
+    //     destination(req, file, done) {
+    //         done(null, 'uploads');
+    //     },
+    //     filename(req, file, done) {       //제로초.png
+    //         const ext = path.extname(file.originalname);    //확장자 추출(.png)
+    //         const basename = path.basename(file.originalname, ext);      //제로초
+    //         done(null, basename + '_' + new Date().getTime() + ext);      //제로초178198168189719.png
+    //     },
+    //     limits: { fileSize: 20 * 1024 * 1024 },      //20MB
+    // })
 
 });
 
@@ -36,7 +59,7 @@ router.get('/:postId', async (req, res, next) => {    //GET /post/1  :1번 게�
         if (!post) {
             return res.status(404).send('존재하지 않는 게시글입니다.');
         }
-        
+
         const fullPost = await Post.findOne({
             where: { id: post.id },
             include: [{
@@ -48,7 +71,7 @@ router.get('/:postId', async (req, res, next) => {    //GET /post/1  :1번 게�
                 }, {
                     model: Image,
                 }]
-            }, {  
+            }, {
                 model: User,
                 attributes: ['id', 'nickname'],
             }, {
@@ -140,8 +163,8 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {    //POS
 
 router.post('/images', isLoggedIn, upload.array('image'), async (req, res, newt) => {  //POST /post/images
     console.log(req.files);
-    res.json(req.files.map((v) => v.filename));         //생성된 파일이름을 클라이언트에 리턴해준다. 결국 src에 파일이름이 들어가고, 나중에 Image테이블 src컬럼에 파일이름이 들어감.
-
+    // res.json(req.files.map((v) => v.filename));         //생성된 파일이름을 클라이언트에 리턴해준다. 결국 src에 파일이름이 들어가고, 나중에 Image테이블 src컬럼에 파일이름이 들어감.
+    res.json(req.files.map((v) => v.location));             //s3
 
 });
 

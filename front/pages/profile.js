@@ -11,6 +11,7 @@ import NicknameEditForm from '../components/NicknameEditForm';
 import FollowList from '../components/FollowList';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWINGS_REQUEST, LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import { backUrl } from '../config/config';
 
 const fetcher = (url) => axios.get(url, { withCredentials: true }).then((result) => result.data);
 

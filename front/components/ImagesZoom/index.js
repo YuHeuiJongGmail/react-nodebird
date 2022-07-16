@@ -4,7 +4,7 @@ import Slick from 'react-slick';
 import styled, { createGlobalStyle } from 'styled-components';
 import { CloseOutlined } from '@ant-design/icons';
 import { Overlay, Global, Header, CloseBtn, ImgWrapper, SlickWrapper, Indicator } from './styles';
-
+import { backUrl } from '../config/config';
 
 
 const ImagesZoom = ({ images, onClose }) => {

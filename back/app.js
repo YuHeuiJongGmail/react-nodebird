@@ -33,7 +33,7 @@ if(process.env.NODE_ENV === 'production'){      //배포용을 위해
     app.use(hpp());
     app.use(helmet());
     app.use(cors({
-        origin: 'http://hijong.monster',      //* -> localhost 로 변경, credentials: true면 직접 주소 지정해야함
+        origin: 'https://hijong.monster',      //* -> localhost 로 변경, credentials: true면 직접 주소 지정해야함
         credentials: true,                      //쿠키사용 설정 
     }));
 }else{
@@ -58,7 +58,7 @@ app.use(session({
     secret: process.env.COOKIE_SECRET,
     cookie: {
         httpOnly: true,
-        secure: false,          //https 설정시 true로 변경할 예정
+        secure: true,          //https 설정시 true로 변경할 예정
         domain: process.env.NODE_ENV === 'production' && '.hijong.monster'
     },
 }));

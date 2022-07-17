@@ -164,7 +164,8 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {    //POS
 router.post('/images', isLoggedIn, upload.array('image'), async (req, res, newt) => {  //POST /post/images
     console.log(req.files);
     // res.json(req.files.map((v) => v.filename));         //생성된 파일이름을 클라이언트에 리턴해준다. 결국 src에 파일이름이 들어가고, 나중에 Image테이블 src컬럼에 파일이름이 들어감.
-    res.json(req.files.map((v) => v.location));             //s3
+    // res.json(req.files.map((v) => v.location));             //s3
+    res.json(req.files.map((v) => v.location.replace(/\/original\//, '/thumb/')));             // original >> thumb 폴더로 변경 
 
 });
 

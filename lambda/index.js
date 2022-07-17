@@ -7,10 +7,10 @@ const s3 = new AWS.S3();
 //이미지 업로드될때 호출이 되도록
 exports.hadler = async (event, context, callback) => {
     const Bucket = event.Records[0].s3.bucket.name;     //react-nodebird-yhj
-    const Key = event.Records[0].s3.object.key;         // original/123123_abc.png
+    const Key = decodeURIComponent(event.Records[0].s3.object.key);         // original/123123_abc.png, 한글을 위해 decodeUrl
     console.log(Bucket, Key);
     const filename = Key.split('/')[Key.split('/').length - 1];     //123123_abc.png
-    const ext = Key.split('.')[Key.split('.').length - 1];
+    const ext = Key.split('.')[Key.split('.').length - 1].toLowerCase();    //확장자를 소문자로 통일
     const requiredFormat = ext == 'jpg' ? 'jpeg' : ext;
     console.log('filename', filename, 'ext', ext);
 

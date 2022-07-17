@@ -27,7 +27,7 @@ db.sequelize.sync()
     .catch(console.error);
 
 passportConfig();
-
+app.set('trust proxy', 1);  //proxy server Nginx  설정시 이값 세팅해줘야 브라우저-Application-cookie-secure값이 true로 설정이되어 쿠카가 공유된다
 if(process.env.NODE_ENV === 'production'){      //배포용을 위해
     app.use(morgan('combined'));
     app.use(hpp());
@@ -56,6 +56,7 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    proxy: true,            //proxy server Nginx  설정시 이값 세팅해줘야 브라우저-Application-cookie-secure값이 true로 설정이되어 쿠카가 공유된다
     cookie: {
         httpOnly: true,
         secure: true,          //https 설정시 true로 변경할 예정
